@@ -2,6 +2,7 @@ enum ApiRoute {
   testRoute,
   getTeamMembersRoute,
   getAbsentMembersRoute,
+  getAbsenceTypes
 }
 
 extension ApiRouteExtension on ApiRoute {
@@ -13,6 +14,8 @@ extension ApiRouteExtension on ApiRoute {
         return '/members';
       case ApiRoute.getAbsentMembersRoute:
         return '/absences';
+      case ApiRoute.getAbsenceTypes:
+        return '/absences/types';
     }
   }
 }
