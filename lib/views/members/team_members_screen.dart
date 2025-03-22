@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:members_app/view_models/members/members_view_model.dart';
-import 'package:members_app/views/widgets/views_error_handler.dart';
-
 import '../../models/members/members_model.dart';
 import '../../models/pagination_request_model.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_fonts.dart';
 import '../../view_models/app_states.dart';
+import '../../view_models/members/members_view_model.dart';
 import '../widgets/custom_cached_network_image.dart';
+import '../widgets/error_widget.dart';
+import '../widgets/no_data_widget.dart';
+import '../widgets/views_error_handler.dart';
 
 class TeamMembersScreen extends StatefulWidget {
   const TeamMembersScreen({super.key});
@@ -57,13 +58,13 @@ class _TeamMembersScreenState extends State<TeamMembersScreen> {
                 members.data ?? [],
                 members.pagination?.nextPage,
               );
+            } else if(state != const LoadingState()) {
+              errorHandler(
+                context: context,
+                state: state,
+              );
             }
-            errorHandler(
-              context: context,
-              state: state,
-            );
           },
-          child: Container(),
         )
       ],
       child: PagedGridView<int, Member>(
@@ -75,57 +76,61 @@ class _TeamMembersScreenState extends State<TeamMembersScreen> {
           childAspectRatio: 200 / 225,
         ),
         builderDelegate: PagedChildBuilderDelegate<Member>(
-          itemBuilder: (context, member, index) {
-            return DecoratedBox(
+          noItemsFoundIndicatorBuilder: (context) => const NoDataWidget(),
+          firstPageErrorIndicatorBuilder: (context) => const ErrorStateWidget(),
+          itemBuilder: (context, member, index) => memberWidget(member: member),
+        ),
+      ),
+    );
+  }
+  
+  memberWidget({required Member member}) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.secondaryColor,
+        border: Border.all(
+          color: AppColors.hintTextColor,
+          width: 1.0,
+        ),
+      ),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          CustomCachedNetworkImage(
+            imageUrl: member.image ?? '',
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 60.h,
               decoration: BoxDecoration(
-                color: AppColors.secondaryColor,
-                border: Border.all(
-                  color: AppColors.hintTextColor,
-                  width: 1.0,
+                gradient: LinearGradient(
+                  begin: const Alignment(0.00, -1.00),
+                  end: const Alignment(0, 1),
+                  colors: [
+                    Colors.black.withOpacity(0.05),
+                    Colors.black.withOpacity(0.37),
+                    Colors.black.withOpacity(0.54),
+                    Colors.black.withOpacity(0.81),
+                    Colors.black.withOpacity(0.90),
+                  ],
                 ),
               ),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  CustomCachedNetworkImage(
-                    imageUrl: member.image ?? '',
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      height: 60.h,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: const Alignment(0.00, -1.00),
-                          end: const Alignment(0, 1),
-                          colors: [
-                            Colors.black.withOpacity(0.05),
-                            Colors.black.withOpacity(0.37),
-                            Colors.black.withOpacity(0.54),
-                            Colors.black.withOpacity(0.81),
-                            Colors.black.withOpacity(0.90),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 20.h,
-                    left: 8.w,
-                    child: Text(
-                      member.name ?? '',
-                      style: AppFonts.bodyFont(
-                        color: AppColors.secondaryColor,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
+            ),
+          ),
+          Positioned(
+            bottom: 20.h,
+            left: 8.w,
+            child: Text(
+              member.name ?? '',
+              style: AppFonts.bodyFont(
+                color: AppColors.secondaryColor,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
               ),
-            );
-          },
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
