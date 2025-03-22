@@ -10,6 +10,7 @@ import '../../view_models/app_states.dart';
 import '../../view_models/members/members_view_model.dart';
 import '../widgets/custom_cached_network_image.dart';
 import '../widgets/error_widget.dart';
+import '../widgets/loading_indicator.dart';
 import '../widgets/no_data_widget.dart';
 import '../widgets/views_error_handler.dart';
 
@@ -58,7 +59,8 @@ class _TeamMembersScreenState extends State<TeamMembersScreen> {
                 members.data ?? [],
                 members.pagination?.nextPage,
               );
-            } else if(state != const LoadingState()) {
+            } else if (state != const LoadingState()) {
+              membersViewModel.membersPagingController.error = '';
               errorHandler(
                 context: context,
                 state: state,
@@ -76,6 +78,11 @@ class _TeamMembersScreenState extends State<TeamMembersScreen> {
           childAspectRatio: 200 / 225,
         ),
         builderDelegate: PagedChildBuilderDelegate<Member>(
+          firstPageProgressIndicatorBuilder: (context) => const Center(
+            child: LoadingIndicator(
+              color: AppColors.primaryColor,
+            ),
+          ),
           noItemsFoundIndicatorBuilder: (context) => const NoDataWidget(),
           firstPageErrorIndicatorBuilder: (context) => const ErrorStateWidget(),
           itemBuilder: (context, member, index) => memberWidget(member: member),
@@ -83,7 +90,7 @@ class _TeamMembersScreenState extends State<TeamMembersScreen> {
       ),
     );
   }
-  
+
   memberWidget({required Member member}) {
     return DecoratedBox(
       decoration: BoxDecoration(
