@@ -115,7 +115,7 @@ ThemeData customTheme() {
     /** TEXT FIELD THEME END*/
     /** APP BAR THEME */
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.secondaryColor,
+      backgroundColor: AppColors.primaryColor,
       // Set the background color
       elevation: 0,
       // Set to 0 for flat AppBar or any value for shadow
@@ -196,11 +196,18 @@ ThemeData customTheme() {
         return AppColors.black;
       }),
     ),
+    /** BOTTOM NAVIGATION BAR THEME START*/
     dropdownMenuTheme: DropdownMenuThemeData(
       menuStyle: MenuStyle(
         backgroundColor: WidgetStateProperty.all(AppColors.secondaryColor),
         surfaceTintColor: WidgetStateProperty.all(AppColors.secondaryColor),
       ),
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: AppColors.secondaryColor, // Set background color to white
+      selectedItemColor: AppColors.primaryColor, // Selected item color
+      unselectedItemColor: Colors.grey, // Unselected item color
+      elevation: 10, // Optional: adds shadow
     ),
   );
 }
