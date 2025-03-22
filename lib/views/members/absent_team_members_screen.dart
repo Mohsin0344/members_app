@@ -9,6 +9,7 @@ import '../../models/members/absent_members_model.dart';
 import '../../models/pagination_request_model.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_fonts.dart';
+import '../../view_models/absences/absence_types_view_model.dart';
 import '../../view_models/app_states.dart';
 import '../../view_models/members/absent_members_view_model.dart';
 import '../widgets/absence_types_widget.dart';
@@ -27,6 +28,7 @@ class AbsentTeamMembersScreen extends StatefulWidget {
 
 class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
   late AbsentMembersViewModel absentMembersViewModel;
+  late AbsenceTypesViewModel absenceTypesViewModel;
   PaginationRequest paginationRequest = PaginationRequest(
     page: 1,
   );
@@ -40,6 +42,7 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
 
   initViewModels() {
     absentMembersViewModel = context.read<AbsentMembersViewModel>();
+    absenceTypesViewModel = context.read<AbsenceTypesViewModel>();
   }
 
   callViewModels() {
@@ -65,6 +68,7 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
                 members.pagination?.nextPage,
               );
             } else if (state != const LoadingState()) {
+              absentMembersViewModel.absentMembersPagingController.error = '';
               errorHandler(
                 context: context,
                 state: state,
@@ -80,6 +84,7 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
         ),
         child: CustomScrollView(
           slivers: [
+            absenceSummaryCard(),
             AbsenceTypesWidget(
               onTypeChange: (type) {
                 paginationRequest.type = type;
@@ -109,6 +114,151 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget absenceSummaryCard() {
+    return SliverToBoxAdapter(
+      child: BlocBuilder<AbsentMembersViewModel, AppState>(
+        builder: (context, state) {
+          if (state is SuccessState<AbsentMembersModel>) {
+            return Container(
+              height: 100.h,
+              // width: 150.w,
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor,
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              margin: EdgeInsets.only(
+                bottom: 10.h,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.person,
+                              color: AppColors.secondaryColor,
+                            ),
+                            4.horizontalSpace,
+                            Text(
+                              '${state.data.pagination!.totalItems ?? 0}',
+                              style: AppFonts.bodyFont(
+                                color: AppColors.secondaryColor,
+                                fontSize: 24.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        4.verticalSpace,
+                        Flexible(
+                          child: Text(
+                            'Absent Members (${absenceTypesViewModel.selectedType})',
+                            style: AppFonts.bodyFont(
+                              color: AppColors.secondaryColor,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () async {
+                        DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                        );
+
+                        if (picked != null) {
+                          setState(() {
+                            paginationRequest.date = picked.toString();
+                          });
+                          absentMembersViewModel.absentMembersPagingController
+                              .refresh();
+                        }
+                      },
+                      child: DecoratedBox(
+                        decoration:
+                            const BoxDecoration(color: Colors.transparent),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.calendar_month,
+                              color: AppColors.secondaryColor,
+                            ),
+                            8.verticalSpace,
+                            Flexible(
+                              child: RichText(
+                                text: TextSpan(
+                                  text: paginationRequest.date
+                                          ?.toReadableDate() ??
+                                      'Select Date',
+                                  style: AppFonts.bodyFont(
+                                    color: AppColors.secondaryColor,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  children: [
+                                    if (paginationRequest.date != null)WidgetSpan(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            paginationRequest.date = null;
+                                          });
+                                          absentMembersViewModel
+                                              .absentMembersPagingController
+                                              .refresh();
+
+                                        },
+                                        child: const DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            color: Colors.transparent
+                                          ),
+                                          child: Icon(
+                                            Icons.close,
+                                            color: AppColors.secondaryColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          } else if (state is LoadingState) {
+            return Container(
+              height: 100.h,
+              color: AppColors.primaryColor,
+              child: const Center(
+                child: LoadingIndicator(color: AppColors.secondaryColor),
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
