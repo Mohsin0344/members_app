@@ -60,6 +60,7 @@ class _TeamMembersScreenState extends State<TeamMembersScreen> {
                 members.pagination?.nextPage,
               );
             } else if (state != const LoadingState()) {
+              membersViewModel.membersPagingController.error = '';
               errorHandler(
                 context: context,
                 state: state,
