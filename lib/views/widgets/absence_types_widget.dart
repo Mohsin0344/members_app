@@ -131,7 +131,7 @@ class _AbsenceTypesWidgetState extends State<AbsenceTypesWidget> {
         runSpacing: 8.h,
         children: [
           ...List.generate(4, (index) {
-            return pillWidget('   ');
+            return pillWidget('');
           })
         ],
       ),
