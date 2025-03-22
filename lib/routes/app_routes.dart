@@ -13,7 +13,9 @@ class AppRoutes {
         );
 
       default:
-        return null;
+        return MaterialPageRoute(
+          builder: (context) => const DashboardScreen(),
+        );
     }
   }
 }
