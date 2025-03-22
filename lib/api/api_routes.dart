@@ -1,6 +1,7 @@
 enum ApiRoute {
   testRoute,
-  getTeamMembersRoute
+  getTeamMembersRoute,
+  getAbsentMembersRoute,
 }
 
 extension ApiRouteExtension on ApiRoute {
@@ -10,6 +11,8 @@ extension ApiRouteExtension on ApiRoute {
         return '/ping';
       case ApiRoute.getTeamMembersRoute:
         return '/members';
+      case ApiRoute.getAbsentMembersRoute:
+        return '/absences';
     }
   }
 }
