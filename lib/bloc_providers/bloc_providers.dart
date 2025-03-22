@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../view_models/members/absent_members_view_model.dart';
 import '../view_models/members/members_view_model.dart';
 import '../view_models/test_view_model.dart';
 
@@ -11,6 +12,9 @@ class BlocProviders {
     ),
     BlocProvider<MembersViewModel>(
       create: (context) => MembersViewModel(),
+    ),
+    BlocProvider<AbsentMembersViewModel>(
+      create: (context) => AbsentMembersViewModel(),
     )
   ];
 }
