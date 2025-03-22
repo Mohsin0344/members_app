@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:members_app/my_app.dart';
 import 'package:members_app/utils/app_extensions.dart';
+import 'package:members_app/views/widgets/loading_indicator.dart';
 
 import '../../models/members/absent_members_model.dart';
 import '../../models/pagination_request_model.dart';
@@ -11,6 +11,7 @@ import '../../utils/app_colors.dart';
 import '../../utils/app_fonts.dart';
 import '../../view_models/app_states.dart';
 import '../../view_models/members/absent_members_view_model.dart';
+import '../widgets/absence_types_widget.dart';
 import '../widgets/custom_cached_network_image.dart';
 import '../widgets/error_widget.dart';
 import '../widgets/no_data_widget.dart';
@@ -72,20 +73,41 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
           },
         )
       ],
-      child: PagedListView.separated(
-        pagingController: absentMembersViewModel.absentMembersPagingController,
+      child: Padding(
         padding: EdgeInsets.symmetric(
           vertical: 10.h,
           horizontal: 20.w,
         ),
-        builderDelegate: PagedChildBuilderDelegate<AbsentMember>(
-          noItemsFoundIndicatorBuilder: (context) => const NoDataWidget(),
-          firstPageErrorIndicatorBuilder: (context) => const ErrorStateWidget(),
-          itemBuilder: (context, absentMember, index) =>
-              memberWidget(absentMember: absentMember),
-        ),
-        separatorBuilder: (BuildContext context, int index) => SizedBox(
-          height: 8.h,
+        child: CustomScrollView(
+          slivers: [
+            AbsenceTypesWidget(
+              onTypeChange: (type) {
+                paginationRequest.type = type;
+                absentMembersViewModel.absentMembersPagingController.itemList =
+                    [];
+                absentMembersViewModel.absentMembersPagingController.refresh();
+              },
+            ),
+            PagedSliverList.separated(
+              pagingController:
+                  absentMembersViewModel.absentMembersPagingController,
+              builderDelegate: PagedChildBuilderDelegate<AbsentMember>(
+                firstPageProgressIndicatorBuilder: (context) => const Center(
+                  child: LoadingIndicator(
+                    color: AppColors.primaryColor,
+                  ),
+                ),
+                noItemsFoundIndicatorBuilder: (context) => const NoDataWidget(),
+                firstPageErrorIndicatorBuilder: (context) =>
+                    const ErrorStateWidget(),
+                itemBuilder: (context, absentMember, index) =>
+                    memberWidget(absentMember: absentMember),
+              ),
+              separatorBuilder: (BuildContext context, int index) => SizedBox(
+                height: 8.h,
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -239,8 +261,8 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
   }
 
   Color _getStatusColor(AbsentMember absentMember) {
-    if (absentMember.confirmedAt != null) return Colors.green;
-    if (absentMember.rejectedAt != null) return Colors.red;
-    return Colors.orange;
+    if (absentMember.confirmedAt != null) return AppColors.greenColor;
+    if (absentMember.rejectedAt != null) return AppColors.redColor;
+    return AppColors.orangeColor;
   }
 }
