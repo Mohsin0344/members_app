@@ -30,8 +30,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Image.asset(AppAssets.appLogo,
-        width: 0.50.sw,
+        title: Image.asset(
+          AppAssets.appLogo,
+          width: 0.50.sw,
         ),
       ),
       body: _screens[_selectedIndex],

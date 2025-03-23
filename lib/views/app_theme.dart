@@ -142,7 +142,7 @@ ThemeData customTheme() {
     /** BOTTOM SHEET THEME END*/
     /** FAB SHEET THEME START*/
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: AppColors.secondaryColor,
+      backgroundColor: AppColors.primaryColor,
     ),
     /** FAB SHEET THEME END*/
     progressIndicatorTheme: ProgressIndicatorThemeData(
