@@ -1,3 +1,6 @@
 class ApiConfig {
-  static String baseUrl = 'http://192.168.100.100:5000/api';
+  //prod url
+  // static String baseUrl = 'https://absence-management-api-production.up.railway.app/api';
+  //local url
+  static String baseUrl = 'http://192.168.18.6:5000/api';
 }
