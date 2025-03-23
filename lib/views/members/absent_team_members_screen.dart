@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:members_app/utils/app_extensions.dart';
 import 'package:members_app/views/widgets/loading_indicator.dart';
@@ -14,6 +15,8 @@ import '../../view_models/absences/absences_ical_view_model.dart';
 import '../../view_models/app_states.dart';
 import '../../view_models/members/absent_members_view_model.dart';
 import '../widgets/absence_types_widget.dart';
+import '../widgets/app_snack_bar.dart';
+import '../widgets/app_toast_widget.dart';
 import '../widgets/custom_cached_network_image.dart';
 import '../widgets/error_widget.dart';
 import '../widgets/no_data_widget.dart';
@@ -79,6 +82,20 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
             }
           },
         ),
+        BlocListener<AbsencesIcalViewModel, AppState>(
+          listener: (context, state) {
+            if(state is UnknownErrorState) {
+              showCustomSnackBar(
+                context, state.error.toString(),
+              );
+            } else if(state is SuccessState) {
+              CustomToasts.showSuccessToast(
+                message: state.data,
+                toastGravity: ToastGravity.BOTTOM,
+              );
+            }
+          },
+        )
       ],
       child: Padding(
         padding: EdgeInsets.symmetric(
