@@ -17,9 +17,7 @@ A Flutter application that manages absences and members, featuring state managem
    git clone <repository-url>
    cd <project-directory>
    ```
-2. 2. Install dependencies:
-
-3. Install dependencies:
+2. Install dependencies:
    ```sh
    flutter pub get
    ```
