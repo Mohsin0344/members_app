@@ -5,7 +5,7 @@ class CustomToasts {
   static bool isToastActive = false;
 
   static void showSuccessToast({
-    String? message = "Success",
+    String? message = 'Success',
     ToastGravity? toastGravity,
   }) {
     if (isToastActive) return;

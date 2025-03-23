@@ -19,26 +19,26 @@ class AbsenceTypesModel implements Decodable<AbsenceTypesModel> {
   String toJson() => json.encode(toMap());
 
   factory AbsenceTypesModel.fromMap(Map<String, dynamic> json) => AbsenceTypesModel(
-        message: json["message"],
-        status: json["status"],
-        data: json["data"] == null
+        message: json['message'],
+        status: json['status'],
+        data: json['data'] == null
             ? []
-            : List<String>.from(json["data"]!.map((x) => x)),
+            : List<String>.from(json['data']!.map((x) => x)),
       );
 
   Map<String, dynamic> toMap() => {
-        "message": message,
-        "status": status,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x)),
+        'message': message,
+        'status': status,
+        'data': data == null ? [] : List<dynamic>.from(data!.map((x) => x)),
       };
 
   @override
   AbsenceTypesModel fromJson(Map<String, dynamic> json) {
-    message = json["message"];
-    status = json["status"];
-    data = json["data"] == null
+    message = json['message'];
+    status = json['status'];
+    data = json['data'] == null
         ? []
-        : List<String>.from(json["data"]!.map((x) => x));
+        : List<String>.from(json['data']!.map((x) => x));
     return this;
   }
 }

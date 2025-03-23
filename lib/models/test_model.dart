@@ -16,19 +16,19 @@ class TestModel implements Decodable<TestModel> {
   String toJson() => json.encode(toMap());
 
   factory TestModel.fromMap(Map<String, dynamic> json) => TestModel(
-    status: json["status"],
-    message: json["message"],
+    status: json['status'],
+    message: json['message'],
   );
 
   Map<String, dynamic> toMap() => {
-    "status": status,
-    "message": message,
+    'status': status,
+    'message': message,
   };
 
   @override
   TestModel fromJson(Map<String, dynamic> json) {
-    status = json["status"];
-    message = json["message"];
+    status = json['status'];
+    message = json['message'];
     return this;
   }
 }

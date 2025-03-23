@@ -24,34 +24,34 @@ class AbsentMembersModel implements Decodable<AbsentMembersModel> {
 
   factory AbsentMembersModel.fromMap(Map<String, dynamic> json) =>
       AbsentMembersModel(
-        message: json["message"],
-        status: json["status"],
-        data: json["data"] == null
+        message: json['message'],
+        status: json['status'],
+        data: json['data'] == null
             ? []
-            : List<AbsentMember>.from(json["data"]!.map((x) => AbsentMember.fromMap(x))),
-        pagination: json["pagination"] == null
+            : List<AbsentMember>.from(json['data']!.map((x) => AbsentMember.fromMap(x))),
+        pagination: json['pagination'] == null
             ? null
-            : Pagination.fromMap(json["pagination"]),
+            : Pagination.fromMap(json['pagination']),
       );
 
   Map<String, dynamic> toMap() => {
-        "message": message,
-        "status": status,
-        "data":
+        'message': message,
+        'status': status,
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
-        "pagination": pagination?.toMap(),
+        'pagination': pagination?.toMap(),
       };
 
   @override
   AbsentMembersModel fromJson(Map<String, dynamic> json) {
-    message = json["message"];
-    status = json["status"];
-    data = json["data"] == null
+    message = json['message'];
+    status = json['status'];
+    data = json['data'] == null
         ? []
-        : List<AbsentMember>.from(json["data"]!.map((x) => AbsentMember.fromMap(x)));
-    pagination = json["pagination"] == null
+        : List<AbsentMember>.from(json['data']!.map((x) => AbsentMember.fromMap(x)));
+    pagination = json['pagination'] == null
         ? null
-        : Pagination.fromMap(json["pagination"]);
+        : Pagination.fromMap(json['pagination']);
     return this;
   }
 }
@@ -92,44 +92,44 @@ class AbsentMember {
   String toJson() => json.encode(toMap());
 
   factory AbsentMember.fromMap(Map<String, dynamic> json) => AbsentMember(
-        admitterId: json["admitterId"],
-        admitterNote: json["admitterNote"],
-        confirmedAt: json["confirmedAt"] == null
+        admitterId: json['admitterId'],
+        admitterNote: json['admitterNote'],
+        confirmedAt: json['confirmedAt'] == null
             ? null
-            : DateTime.parse(json["confirmedAt"]),
-        createdAt: json["createdAt"] == null
+            : DateTime.parse(json['confirmedAt']),
+        createdAt: json['createdAt'] == null
             ? null
-            : DateTime.parse(json["createdAt"]),
-        crewId: json["crewId"],
+            : DateTime.parse(json['createdAt']),
+        crewId: json['crewId'],
         endDate:
-            json["endDate"] == null ? null : DateTime.parse(json["endDate"]),
-        id: json["id"],
-        memberNote: json["memberNote"],
-        rejectedAt: json["rejectedAt"],
-        startDate: json["startDate"] == null
+            json['endDate'] == null ? null : DateTime.parse(json['endDate']),
+        id: json['id'],
+        memberNote: json['memberNote'],
+        rejectedAt: json['rejectedAt'],
+        startDate: json['startDate'] == null
             ? null
-            : DateTime.parse(json["startDate"]),
-        type: json["type"],
-        userId: json["userId"],
-        member: json["member"] == null ? null : Member.fromMap(json["member"]),
+            : DateTime.parse(json['startDate']),
+        type: json['type'],
+        userId: json['userId'],
+        member: json['member'] == null ? null : Member.fromMap(json['member']),
       );
 
   Map<String, dynamic> toMap() => {
-        "admitterId": admitterId,
-        "admitterNote": admitterNote,
-        "confirmedAt": confirmedAt?.toIso8601String(),
-        "createdAt": createdAt?.toIso8601String(),
-        "crewId": crewId,
-        "endDate":
+        'admitterId': admitterId,
+        'admitterNote': admitterNote,
+        'confirmedAt': confirmedAt?.toIso8601String(),
+        'createdAt': createdAt?.toIso8601String(),
+        'crewId': crewId,
+        'endDate':
             "${endDate!.year.toString().padLeft(4, '0')}-${endDate!.month.toString().padLeft(2, '0')}-${endDate!.day.toString().padLeft(2, '0')}",
-        "id": id,
-        "memberNote": memberNote,
-        "rejectedAt": rejectedAt,
-        "startDate":
+        'id': id,
+        'memberNote': memberNote,
+        'rejectedAt': rejectedAt,
+        'startDate':
             "${startDate!.year.toString().padLeft(4, '0')}-${startDate!.month.toString().padLeft(2, '0')}-${startDate!.day.toString().padLeft(2, '0')}",
-        "type": type,
-        "userId": userId,
-        "member": member?.toMap(),
+        'type': type,
+        'userId': userId,
+        'member': member?.toMap(),
       };
 }
 
@@ -153,18 +153,18 @@ class Member {
   String toJson() => json.encode(toMap());
 
   factory Member.fromMap(Map<String, dynamic> json) => Member(
-        crewId: json["crewId"],
-        id: json["id"],
-        image: json["image"],
-        name: json["name"],
-        userId: json["userId"],
+        crewId: json['crewId'],
+        id: json['id'],
+        image: json['image'],
+        name: json['name'],
+        userId: json['userId'],
       );
 
   Map<String, dynamic> toMap() => {
-        "crewId": crewId,
-        "id": id,
-        "image": image,
-        "name": name,
-        "userId": userId,
+        'crewId': crewId,
+        'id': id,
+        'image': image,
+        'name': name,
+        'userId': userId,
       };
 }

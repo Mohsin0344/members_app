@@ -48,6 +48,8 @@ dependencies:
   fluttertoast: ^8.2.12
   share_plus: ^10.1.4
 
+  bloc: any
+  flutter_cache_manager: any
 dev_dependencies:
   mockito:
   bloc_test:

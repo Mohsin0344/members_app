@@ -13,7 +13,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
 
   bool _isValidUrl(String url) {
     final Uri? uri = Uri.tryParse(url);
-    return uri != null && (uri.isScheme("http") || uri.isScheme("https"));
+    return uri != null && (uri.isScheme('http') || uri.isScheme('https'));
   }
 
   @override

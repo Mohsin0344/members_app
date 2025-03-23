@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:members_app/models/members/absent_members_model.dart';
 import '../../api/api_client.dart';
 import '../../api/api_methods.dart';
