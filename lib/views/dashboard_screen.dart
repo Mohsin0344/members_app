@@ -35,7 +35,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           width: 0.50.sw,
         ),
       ),
-      body: _screens[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _screens,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: AppColors.secondaryColor,
         currentIndex: _selectedIndex,
