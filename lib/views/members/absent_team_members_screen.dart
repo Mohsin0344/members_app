@@ -140,14 +140,14 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
                 )
               ],
             ),
-            exportIcalWidget(),
+            exportIcsFileWidget(),
           ],
         ),
       ),
     );
   }
 
-  exportIcalWidget() {
+  exportIcsFileWidget() {
     return BlocBuilder<AbsentMembersViewModel, AppState>(
       builder: (context, state) {
         if(state is SuccessState<AbsentMembersModel>) {
