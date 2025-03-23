@@ -15,41 +15,40 @@ class AbsenceIcalServiceRepository implements AbsenceIcalService {
   Future generateICalFile({required List<AbsentMember> absences}) async {
     try {
       StringBuffer icsContent = StringBuffer();
-      icsContent.writeln('BEGIN:VCALENDAR');
-      icsContent.writeln('VERSION:2.0');
-      icsContent.writeln('PRODID:-//MembersApp//NONSGML Event//EN');
+      icsContent.write('BEGIN:VCALENDAR\r\n');
+      icsContent.write('VERSION:2.0\r\n');
+      icsContent.write('PRODID:-//MembersApp//NONSGML Event//EN\r\n');
 
       for (var absence in absences) {
         String startDate = absence.startDate.toString();
         String endDate = absence.endDate.toString();
         String summary = '${absence.member?.name} - ${absence.type}';
-        String description = absence.memberNote ?? 'No additional details';
+        String description = absence.memberNote?.replaceAll('\n', '\\n') ?? 'No additional details';
 
-        icsContent.writeln('BEGIN:VEVENT');
-        icsContent.writeln('UID:${absence.id}@membersapp.com');
-        icsContent.writeln('DTSTAMP:${_formatDate(DateTime.now())}');
-        icsContent.writeln('DTSTART:${_formatDate(DateTime.parse(startDate))}');
-        icsContent.writeln('DTEND:${_formatDate(DateTime.parse(endDate))}');
-        icsContent.writeln('SUMMARY:$summary');
-        icsContent.writeln('DESCRIPTION:$description');
-        icsContent.writeln('END:VEVENT');
+        icsContent.write('BEGIN:VEVENT\r\n');
+        icsContent.write('UID:${absence.id}@membersapp.com\r\n');
+        icsContent.write('DTSTAMP:${_formatDate(DateTime.now())}\r\n');
+        icsContent.write('DTSTART:${_formatDate(DateTime.parse(startDate))}\r\n');
+        icsContent.write('DTEND:${_formatDate(DateTime.parse(endDate))}\r\n');
+        icsContent.write('SUMMARY:$summary\r\n');
+        icsContent.write('DESCRIPTION:$description\r\n');
+        icsContent.write('END:VEVENT\r\n');
       }
 
-      icsContent.writeln('END:VCALENDAR');
+      icsContent.write('END:VCALENDAR\r\n');
 
       // Save the iCal file
       final directory = await getApplicationDocumentsDirectory();
       final filePath = '${directory.path}/absences.ics';
       File file = File(filePath);
-      await file.writeAsString(icsContent.toString());
+      await file.writeAsString(icsContent.toString(), mode: FileMode.write, flush: true);
       log('iCal file saved at: $filePath');
       return 'iCal file saved at: $filePath';
-    } catch(e) {
+    } catch (e) {
       throw UnknownErrorState(error: e.toString());
     }
   }
 
-// Helper function to format dates in iCal format
   String _formatDate(DateTime dateTime) {
     return '${dateTime.toUtc().toIso8601String().replaceAll('-', '').replaceAll(':', '').split('.')[0]}Z';
   }
