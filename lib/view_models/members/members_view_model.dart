@@ -12,10 +12,6 @@ class MembersViewModel extends Cubit<AppState>
     with ExceptionHandlingMixin<AppState> {
   MembersViewModel() : super(const InitialState());
   var client = ApiClient();
-  final PagingController<int, Member> membersPagingController =
-      PagingController(
-    firstPageKey: 1,
-  );
 
   getTeamMembers({required PaginationRequest paginationRequest}) async {
     try {

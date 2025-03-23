@@ -23,6 +23,10 @@ class TeamMembersScreen extends StatefulWidget {
 
 class _TeamMembersScreenState extends State<TeamMembersScreen> {
   late MembersViewModel membersViewModel;
+  final PagingController<int, Member> membersPagingController =
+  PagingController(
+    firstPageKey: 1,
+  );
   PaginationRequest paginationRequest = PaginationRequest(
     page: 1,
   );
@@ -39,12 +43,13 @@ class _TeamMembersScreenState extends State<TeamMembersScreen> {
   }
 
   callViewModels() {
-    membersViewModel.membersPagingController.addPageRequestListener((pageKey) {
-      paginationRequest.page = pageKey;
-      membersViewModel.getTeamMembers(
-        paginationRequest: paginationRequest,
-      );
-    });
+      membersPagingController
+          .addPageRequestListener((pageKey) {
+        paginationRequest.page = pageKey;
+        membersViewModel.getTeamMembers(
+          paginationRequest: paginationRequest,
+        );
+      });
   }
 
   @override
@@ -55,12 +60,12 @@ class _TeamMembersScreenState extends State<TeamMembersScreen> {
           listener: (context, state) {
             if (state is SuccessState<MembersModel>) {
               MembersModel members = state.data;
-              membersViewModel.membersPagingController.appendPage(
+              membersPagingController.appendPage(
                 members.data ?? [],
                 members.pagination?.nextPage,
               );
             } else if (state != const LoadingState()) {
-              membersViewModel.membersPagingController.error = '';
+              membersPagingController.error = '';
               errorHandler(
                 context: context,
                 state: state,
@@ -70,7 +75,7 @@ class _TeamMembersScreenState extends State<TeamMembersScreen> {
         )
       ],
       child: PagedGridView<int, Member>(
-        pagingController: membersViewModel.membersPagingController,
+        pagingController: membersPagingController,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: 2.w,
