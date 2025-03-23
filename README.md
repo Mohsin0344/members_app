@@ -2,9 +2,9 @@
 
 A Flutter application that manages absences and members, featuring state management with `flutter_bloc`, API calls using `Dio`, and test cases with `mockito`. The app supports filtering, pagination, and exporting absences as an ICS file.
 
-## 📥 Installation Guide
-
 ##  Detail Demo of Flutter App: https://drive.google.com/file/d/1JGvs0SN7hRkOLtwXXUw7yPDHeb_axZNy/view?usp=sharing
+
+## 📥 Installation Guide
 
 ### Prerequisites
 - Flutter SDK installed ([Download Flutter](https://flutter.dev/docs/get-started/install))
