@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:members_app/view_models/app_states.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../models/members/absent_members_model.dart';
 
@@ -43,6 +44,7 @@ class AbsenceIcalServiceRepository implements AbsenceIcalService {
       File file = File(filePath);
       await file.writeAsString(icsContent.toString(), mode: FileMode.write, flush: true);
       log('iCal file saved at: $filePath');
+      Share.shareXFiles([XFile(filePath)]);
       return 'iCal file saved at: $filePath';
     } catch (e) {
       throw UnknownErrorState(error: e.toString());
