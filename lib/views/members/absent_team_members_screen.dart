@@ -10,6 +10,7 @@ import '../../models/pagination_request_model.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_fonts.dart';
 import '../../view_models/absences/absence_types_view_model.dart';
+import '../../view_models/absences/absences_ical_view_model.dart';
 import '../../view_models/app_states.dart';
 import '../../view_models/members/absent_members_view_model.dart';
 import '../widgets/absence_types_widget.dart';
@@ -29,6 +30,7 @@ class AbsentTeamMembersScreen extends StatefulWidget {
 class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
   late AbsentMembersViewModel absentMembersViewModel;
   late AbsenceTypesViewModel absenceTypesViewModel;
+  late AbsencesIcalViewModel absencesIcalViewModel;
   PaginationRequest paginationRequest = PaginationRequest(
     page: 1,
   );
@@ -43,6 +45,7 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
   initViewModels() {
     absentMembersViewModel = context.read<AbsentMembersViewModel>();
     absenceTypesViewModel = context.read<AbsenceTypesViewModel>();
+    absencesIcalViewModel = context.read<AbsencesIcalViewModel>();
   }
 
   callViewModels() {
@@ -75,46 +78,96 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
               );
             }
           },
-        )
+        ),
       ],
       child: Padding(
         padding: EdgeInsets.symmetric(
           vertical: 10.h,
           horizontal: 20.w,
         ),
-        child: CustomScrollView(
-          slivers: [
-            absenceSummaryCard(),
-            AbsenceTypesWidget(
-              onTypeChange: (type) {
-                paginationRequest.type = type;
-                absentMembersViewModel.absentMembersPagingController.itemList =
-                    [];
-                absentMembersViewModel.absentMembersPagingController.refresh();
-              },
-            ),
-            PagedSliverList.separated(
-              pagingController:
-                  absentMembersViewModel.absentMembersPagingController,
-              builderDelegate: PagedChildBuilderDelegate<AbsentMember>(
-                firstPageProgressIndicatorBuilder: (context) => const Center(
-                  child: LoadingIndicator(
-                    color: AppColors.primaryColor,
-                  ),
+        child: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                absenceSummaryCard(),
+                AbsenceTypesWidget(
+                  onTypeChange: (type) {
+                    paginationRequest.type = type;
+                    absentMembersViewModel.absentMembersPagingController.itemList =
+                        [];
+                    absentMembersViewModel.absentMembersPagingController.refresh();
+                  },
                 ),
-                noItemsFoundIndicatorBuilder: (context) => const NoDataWidget(),
-                firstPageErrorIndicatorBuilder: (context) =>
-                    const ErrorStateWidget(),
-                itemBuilder: (context, absentMember, index) =>
-                    memberWidget(absentMember: absentMember),
-              ),
-              separatorBuilder: (BuildContext context, int index) => SizedBox(
-                height: 8.h,
-              ),
-            )
+                PagedSliverList.separated(
+                  pagingController:
+                      absentMembersViewModel.absentMembersPagingController,
+                  builderDelegate: PagedChildBuilderDelegate<AbsentMember>(
+                    firstPageProgressIndicatorBuilder: (context) => const Center(
+                      child: LoadingIndicator(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    noItemsFoundIndicatorBuilder: (context) => const NoDataWidget(),
+                    firstPageErrorIndicatorBuilder: (context) =>
+                        const ErrorStateWidget(),
+                    itemBuilder: (context, absentMember, index) =>
+                        memberWidget(absentMember: absentMember),
+                  ),
+                  separatorBuilder: (BuildContext context, int index) => SizedBox(
+                    height: 8.h,
+                  ),
+                )
+              ],
+            ),
+            exportIcalWidget(),
           ],
         ),
       ),
+    );
+  }
+
+  exportIcalWidget() {
+    return BlocBuilder<AbsentMembersViewModel, AppState>(
+      builder: (context, state) {
+        if(state is SuccessState<AbsentMembersModel>) {
+          if((state.data.data?.isNotEmpty ?? false)) {
+            return Positioned(
+              bottom: 10.h,
+              right: 0,
+              child: FloatingActionButton(
+                onPressed: () {
+                  if (absencesIcalViewModel.state == const LoadingState()) {
+                    return;
+                  }
+                  absencesIcalViewModel.generateIcalFile(
+                    absences: absentMembersViewModel
+                        .absentMembersPagingController.itemList ??
+                        [],
+                  );
+                },
+                child: BlocBuilder<AbsencesIcalViewModel, AppState>(
+                  builder: (context, state) {
+                    if (state is LoadingState) {
+                      return const Center(
+                        child: LoadingIndicator(
+                          color: AppColors.secondaryColor,
+                        ),
+                      );
+                    }
+                    return const Icon(
+                      Icons.save_alt,
+                      color: AppColors.secondaryColor,
+                    );
+                  },
+                ),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }
+        return const SizedBox.shrink();
+      },
     );
   }
 
