@@ -34,6 +34,10 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
   late AbsentMembersViewModel absentMembersViewModel;
   late AbsenceTypesViewModel absenceTypesViewModel;
   late AbsencesIcalViewModel absencesIcalViewModel;
+  final PagingController<int, AbsentMember> absentMembersPagingController =
+  PagingController(
+    firstPageKey: 1,
+  );
   PaginationRequest paginationRequest = PaginationRequest(
     page: 1,
   );
@@ -52,13 +56,13 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
   }
 
   callViewModels() {
-    absentMembersViewModel.absentMembersPagingController
-        .addPageRequestListener((pageKey) {
-      paginationRequest.page = pageKey;
-      absentMembersViewModel.getAbsentMembers(
-        paginationRequest: paginationRequest,
-      );
-    });
+      absentMembersPagingController
+          .addPageRequestListener((pageKey) {
+        paginationRequest.page = pageKey;
+        absentMembersViewModel.getAbsentMembers(
+          paginationRequest: paginationRequest,
+        );
+      });
   }
 
   @override
@@ -69,12 +73,12 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
           listener: (context, state) {
             if (state is SuccessState<AbsentMembersModel>) {
               AbsentMembersModel members = state.data;
-              absentMembersViewModel.absentMembersPagingController.appendPage(
+              absentMembersPagingController.appendPage(
                 members.data ?? [],
                 members.pagination?.nextPage,
               );
             } else if (state != const LoadingState()) {
-              absentMembersViewModel.absentMembersPagingController.error = '';
+              absentMembersPagingController.error = '';
               errorHandler(
                 context: context,
                 state: state,
@@ -110,14 +114,14 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
                 AbsenceTypesWidget(
                   onTypeChange: (type) {
                     paginationRequest.type = type;
-                    absentMembersViewModel.absentMembersPagingController.itemList =
+                    absentMembersPagingController.itemList =
                         [];
-                    absentMembersViewModel.absentMembersPagingController.refresh();
+                    absentMembersPagingController.refresh();
                   },
                 ),
                 PagedSliverList.separated(
                   pagingController:
-                      absentMembersViewModel.absentMembersPagingController,
+                      absentMembersPagingController,
                   builderDelegate: PagedChildBuilderDelegate<AbsentMember>(
                     firstPageProgressIndicatorBuilder: (context) => const Center(
                       child: LoadingIndicator(
@@ -157,8 +161,7 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
                     return;
                   }
                   absencesIcalViewModel.generateIcalFile(
-                    absences: absentMembersViewModel
-                        .absentMembersPagingController.itemList ??
+                    absences: absentMembersPagingController.itemList ??
                         [],
                   );
                 },
@@ -257,7 +260,7 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
                           setState(() {
                             paginationRequest.date = picked.toString();
                           });
-                          absentMembersViewModel.absentMembersPagingController
+                          absentMembersPagingController
                               .refresh();
                         }
                       },
@@ -290,8 +293,7 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
                                           setState(() {
                                             paginationRequest.date = null;
                                           });
-                                          absentMembersViewModel
-                                              .absentMembersPagingController
+                                          absentMembersPagingController
                                               .refresh();
 
                                         },
@@ -321,7 +323,13 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
           } else if (state is LoadingState) {
             return Container(
               height: 100.h,
-              color: AppColors.primaryColor,
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor,
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              margin: EdgeInsets.only(
+                bottom: 10.h,
+              ),
               child: const Center(
                 child: LoadingIndicator(color: AppColors.secondaryColor),
               ),

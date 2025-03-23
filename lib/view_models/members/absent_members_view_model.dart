@@ -12,10 +12,6 @@ class AbsentMembersViewModel extends Cubit<AppState>
     with ExceptionHandlingMixin<AppState> {
   AbsentMembersViewModel() : super(const InitialState());
   var client = ApiClient();
-  final PagingController<int, AbsentMember> absentMembersPagingController =
-  PagingController(
-    firstPageKey: 1,
-  );
 
   getAbsentMembers({required PaginationRequest paginationRequest}) async {
     try {
