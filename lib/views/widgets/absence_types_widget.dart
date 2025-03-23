@@ -36,6 +36,7 @@ class _AbsenceTypesWidgetState extends State<AbsenceTypesWidget> {
   }
 
   callViewModels() {
+    absenceTypesViewModel.selectedType = 'All';
     absenceTypesViewModel.getAbsenceTypes();
   }
 
