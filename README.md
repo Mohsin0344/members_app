@@ -4,6 +4,8 @@ A Flutter application that manages absences and members, featuring state managem
 
 ## 📥 Installation Guide
 
+##  Detail Demo of Flutter App: https://drive.google.com/file/d/1JGvs0SN7hRkOLtwXXUw7yPDHeb_axZNy/view?usp=sharing
+
 ### Prerequisites
 - Flutter SDK installed ([Download Flutter](https://flutter.dev/docs/get-started/install))
 - Dart installed
