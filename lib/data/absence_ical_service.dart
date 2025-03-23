@@ -7,13 +7,13 @@ import 'package:share_plus/share_plus.dart';
 
 import '../models/members/absent_members_model.dart';
 
-abstract class AbsenceIcalService {
-  Future generateICalFile({required List<AbsentMember> absences});
+abstract class AbsenceIcsFileService {
+  Future generateIcsFile({required List<AbsentMember> absences});
 }
 
-class AbsenceIcalServiceRepository implements AbsenceIcalService {
+class AbsenceIcsFileServiceRepository implements AbsenceIcsFileService {
   @override
-  Future generateICalFile({required List<AbsentMember> absences}) async {
+  Future generateIcsFile({required List<AbsentMember> absences}) async {
     try {
       StringBuffer icsContent = StringBuffer();
       icsContent.write('BEGIN:VCALENDAR\r\n');

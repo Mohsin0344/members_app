@@ -21,9 +21,9 @@ class BlocProviders {
     BlocProvider<AbsenceTypesViewModel>(
       create: (context) => AbsenceTypesViewModel(),
     ),
-    BlocProvider<AbsencesIcalViewModel>(
-      create: (context) => AbsencesIcalViewModel(
-        AbsenceIcalServiceRepository(),
+    BlocProvider<AbsenceCalendarFileViewModel>(
+      create: (context) => AbsenceCalendarFileViewModel(
+        AbsenceIcsFileServiceRepository(),
       ),
     ),
   ];

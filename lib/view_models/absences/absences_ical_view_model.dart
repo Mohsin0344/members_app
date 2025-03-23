@@ -4,21 +4,21 @@ import 'package:members_app/models/members/absent_members_model.dart';
 import '../app_states.dart';
 import '../view_model_exception_handler.dart';
 
-class AbsencesIcalViewModel extends Cubit<AppState>
+class AbsenceCalendarFileViewModel extends Cubit<AppState>
     with ExceptionHandlingMixin<AppState> {
-  final AbsenceIcalService _absenceIcalService;
+  final AbsenceIcsFileService _absenceIcsFileService;
 
-  AbsencesIcalViewModel(this._absenceIcalService) : super(const InitialState());
+  AbsenceCalendarFileViewModel(this._absenceIcsFileService) : super(const InitialState());
 
-  generateIcalFile({required List<AbsentMember> absences}) async {
+  generateIcsFile({required List<AbsentMember> absences}) async {
     try {
       emit(const LoadingState());
-      var absenceIcalServiceResponse = await _absenceIcalService.generateICalFile(
+      var icsFileGenerationResponse = await _absenceIcsFileService.generateIcsFile(
         absences: absences,
       );
       emit(
         SuccessState(
-          data: absenceIcalServiceResponse,
+          data: icsFileGenerationResponse,
         ),
       );
     } catch (e) {

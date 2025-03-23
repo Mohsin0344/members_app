@@ -33,7 +33,7 @@ class AbsentTeamMembersScreen extends StatefulWidget {
 class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
   late AbsentMembersViewModel absentMembersViewModel;
   late AbsenceTypesViewModel absenceTypesViewModel;
-  late AbsencesIcalViewModel absencesIcalViewModel;
+  late AbsenceCalendarFileViewModel absencesCalendarFileViewModel;
   final PagingController<int, AbsentMember> absentMembersPagingController =
   PagingController(
     firstPageKey: 1,
@@ -52,7 +52,7 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
   initViewModels() {
     absentMembersViewModel = context.read<AbsentMembersViewModel>();
     absenceTypesViewModel = context.read<AbsenceTypesViewModel>();
-    absencesIcalViewModel = context.read<AbsencesIcalViewModel>();
+    absencesCalendarFileViewModel = context.read<AbsenceCalendarFileViewModel>();
   }
 
   callViewModels() {
@@ -86,7 +86,7 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
             }
           },
         ),
-        BlocListener<AbsencesIcalViewModel, AppState>(
+        BlocListener<AbsenceCalendarFileViewModel, AppState>(
           listener: (context, state) {
             if(state is UnknownErrorState) {
               showCustomSnackBar(
@@ -157,15 +157,15 @@ class _AbsentTeamMembersScreenState extends State<AbsentTeamMembersScreen> {
               right: 0,
               child: FloatingActionButton(
                 onPressed: () {
-                  if (absencesIcalViewModel.state == const LoadingState()) {
+                  if (absencesCalendarFileViewModel.state == const LoadingState()) {
                     return;
                   }
-                  absencesIcalViewModel.generateIcalFile(
+                  absencesCalendarFileViewModel.generateIcsFile(
                     absences: absentMembersPagingController.itemList ??
                         [],
                   );
                 },
-                child: BlocBuilder<AbsencesIcalViewModel, AppState>(
+                child: BlocBuilder<AbsenceCalendarFileViewModel, AppState>(
                   builder: (context, state) {
                     if (state is LoadingState) {
                       return const Center(
