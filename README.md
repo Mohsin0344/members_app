@@ -17,7 +17,7 @@ A Flutter application that manages absences and members, featuring state managem
    ```
 2. 2. Install dependencies:
 ```sh
-fvm use 3.24.0
+   fvm use 3.24.0
 ```
 3. Install dependencies:
    ```sh
