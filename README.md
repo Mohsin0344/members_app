@@ -14,7 +14,7 @@ A Flutter application that manages absences and members, featuring state managem
 ### Steps
 1. Clone this repository:
    ```sh
-   git clone [<repository-url>](https://github.com/Mohsin0344/members_app.git)
+   git clone https://github.com/Mohsin0344/members_app.git
    cd members_app
    ```
 2. Install dependencies:
