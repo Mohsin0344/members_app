@@ -4,7 +4,7 @@ A Flutter application that manages absences and members, featuring state managem
 
 ##  Detail Demo of Flutter App: https://drive.google.com/file/d/1JGvs0SN7hRkOLtwXXUw7yPDHeb_axZNy/view?usp=sharing
 
-## 📥 Installation Guide
+## 👥 Installation Guide
 
 ### Prerequisites
 - Flutter SDK installed ([Download Flutter](https://flutter.dev/docs/get-started/install))
@@ -29,6 +29,16 @@ A Flutter application that manages absences and members, featuring state managem
    ```sh
    flutter test
    ```
+5. **Connecting to Local API:**  
+   By default, the app is configured to connect to the **deployed API**.  
+   If you want to connect to your local API:
+   - Start the **absence-management-api** server.
+   - Open `api/api_config.dart` and change:
+     ```dart
+     static String baseUrl = 'http://192.168.18.6:5000/api'; (local)
+     static String baseUrl = 'https://absence-management-api-production.up.railway.app/api' (prod)
+     ```
+   - Restart the app.
 
 ---
 
@@ -48,7 +58,7 @@ A Flutter application that manages absences and members, featuring state managem
     - `build_runner`
     - `flutter_test`
 
-## 📂 Project Structure
+## 💂️ Project Structure
 
 ```
 - api
